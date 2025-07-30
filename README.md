@@ -129,6 +129,132 @@
 
 [For a thorough review of our features, see our docs here](https://docs.librechat.ai/) 📚
 
+## 🚀 Quick Setup with Ollama & Playwright MCP
+
+This setup includes:
+- **Local Ollama AI models** (llama3.2, llama3, phi3, deepseek-r1)
+- **Playwright MCP visual browser automation** (22+ browser tools)
+- **OpenRouter integration** for additional AI models
+
+### Prerequisites
+- Docker and Docker Compose
+- Git
+
+### Setup Steps
+
+1. **Clone and Setup**
+   ```bash
+   git clone https://github.com/danny-avila/LibreChat.git
+   cd LibreChat
+   cp .env.example .env
+   ```
+
+2. **Configure Environment Variables**
+   Edit `.env` file and add:
+   ```bash
+   # Fix Docker warnings
+   UID=1000
+   GID=1000
+   
+   # Essential configuration
+   HOST=0.0.0.0
+   PORT=3080
+   MONGO_URI=mongodb://mongodb:27017/LibreChat
+   MEILI_HOST=http://meilisearch:7700
+   RAG_PORT=8000
+   RAG_API_URL=http://rag_api:8000
+   
+   # Security keys (generate secure values)
+   CREDS_KEY=your_secure_creds_key_here
+   CREDS_IV=your_secure_creds_iv_here
+   JWT_SECRET=your_secure_jwt_secret_here
+   JWT_REFRESH_SECRET=your_secure_jwt_refresh_secret_here
+   ```
+
+3. **Ollama Setup (Choose One)**
+
+   **Option A: Ollama Inside Docker (Recommended)**
+   - Ollama runs in a Docker container
+   - Models are downloaded automatically
+   - Uses `http://ollama:11434` as base URL
+   
+   **Option B: Ollama Outside Docker**
+   - Install Ollama on your host system
+   - Download models manually: `ollama pull llama3.2:latest`
+   - Uses `http://host.docker.internal:11434` as base URL
+   - Update `librechat.yaml` baseURL accordingly
+
+4. **Start Services**
+   ```bash
+   docker-compose up -d
+   ```
+
+5. **Access LibreChat**
+   - Open http://localhost:3080
+   - Create an account
+   - Select Ollama models or configure OpenRouter
+
+### 🎭 Playwright MCP Visual Browser Automation
+
+The setup includes a Playwright MCP server with 22+ browser automation tools:
+
+**Available Tools:**
+- Navigation: `browser_navigate`, `browser_navigate_back`, `browser_navigate_forward`
+- Screenshots: `browser_take_screenshot`, `browser_snapshot`
+- Interactions: `browser_click`, `browser_type`, `browser_hover`
+- Tab Management: `browser_tab_new`, `browser_tab_select`, `browser_tab_close`
+- Advanced: `browser_evaluate`, `browser_file_upload`, `browser_wait_for`
+
+**Example Commands:**
+```
+"Navigate to google.com and take a screenshot"
+"Search for 'LibreChat' on Google and click the first result"
+"Go to YouTube and search for 'AI tutorials'"
+"Take a screenshot of the current page"
+```
+
+**Features:**
+- ✅ **Visual Browser**: Runs in headed mode (not headless) for automation visualization
+- ✅ **Session Persistence**: Browser state is saved between operations
+- ✅ **Trace Logging**: Detailed logs for debugging automation
+- ✅ **Stable Connection**: Uses streamable-http for reliable MCP communication
+
+### 🔧 Configuration Files
+
+- `librechat.yaml`: Main configuration for AI models and MCP servers
+- `docker-compose.yml`: Docker services including Playwright MCP container
+- `.env`: Environment variables and security keys
+
+### 📊 Model Support
+
+**Local Ollama Models:**
+- llama3.2:latest (3B parameters, fast responses)
+- llama3:latest (8B parameters, balanced performance)
+- phi3:latest (3.8B parameters, efficient)
+- deepseek-r1:latest (reasoning model)
+
+**OpenRouter Integration:**
+- Access to 100+ AI models
+- Requires OpenRouter API key
+- Supports latest models from OpenAI, Anthropic, Google, etc.
+
+### 🛠️ Troubleshooting
+
+**MCP Connection Issues:**
+- Check `docker-compose logs playwright-mcp` for container status
+- Verify `docker-compose logs api` for MCP initialization
+- Ensure containers are on the same Docker network
+
+**Ollama Model Issues:**
+- For external Ollama: Ensure service is running on port 11434
+- For Docker Ollama: Check container logs and model downloads
+- Verify baseURL in `librechat.yaml` matches your setup
+
+**Browser Automation Issues:**
+- Playwright MCP runs in headed mode for visual feedback
+- Check browser logs with `browser_console_messages` tool
+- Use `browser_wait_for` for dynamic content loading
+
 ## 🪶 All-In-One AI Conversations with LibreChat
 
 LibreChat brings together the future of assistant AIs with the revolutionary technology of OpenAI's ChatGPT. Celebrating the original styling, LibreChat gives you the ability to integrate multiple AI models. It also integrates and enhances original client features such as conversation and message search, prompt templates and plugins.
