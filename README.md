@@ -227,11 +227,44 @@ The setup includes a Playwright MCP server with 22+ browser automation tools:
 
 ### 📊 Model Support
 
-**Local Ollama Models:**
-- llama3.2:latest (3B parameters, fast responses)
-- llama3:latest (8B parameters, balanced performance)
-- phi3:latest (3.8B parameters, efficient)
-- deepseek-r1:latest (reasoning model)
+---
+
+## 🔧 **Custom Fork Configuration**
+
+> **Note**: This section contains custom configurations specific to this fork. When syncing with upstream, these changes will be preserved separately from the main LibreChat documentation.
+
+### **Automatic Ollama Model Download**
+
+**Default Model Configuration:**
+- **Default Model**: `llama3.2:1b` (1.3GB) - Optimized for systems with limited memory
+- **Auto-download**: Models are automatically downloaded when Docker Compose starts
+- **Memory Optimized**: Selected to work with systems having 3-4GB available RAM
+
+**How to Change the Default Model:**
+
+1. **Edit `.env` file** (create from `.env.example` if needed):
+   ```bash
+   # Change this line to your preferred model
+   DEFAULT_OLLAMA_MODEL=llama3.2:1b
+   ```
+
+2. **Recommended Models by Memory:**
+   - **Low Memory (2-3GB)**: `tinyllama:latest` (~600MB), `qwen2.5:0.5b` (~400MB)
+   - **Medium Memory (3-4GB)**: `llama3.2:1b` (1.3GB), `phi3:mini` (~2.2GB)
+   - **High Memory (4GB+)**: `llama3.2:latest` (3.4GB), `phi3:latest` (3.8GB)
+
+3. **Restart Docker Compose**:
+   ```bash
+   docker-compose down
+   docker-compose up -d
+   ```
+
+**Available Local Ollama Models:**
+- `llama3.2:1b` (1.3GB, fast responses, memory efficient) ⭐ **Default**
+- `llama3.2:latest` (3.4GB, better quality, requires more memory)
+- `tinyllama:latest` (~600MB, very fast, basic capabilities)
+- `phi3:mini` (2.2GB, Microsoft model, good balance)
+- `qwen2.5:0.5b` (~400MB, very small, quick responses)
 
 **OpenRouter Integration:**
 - Access to 100+ AI models
@@ -246,9 +279,17 @@ The setup includes a Playwright MCP server with 22+ browser automation tools:
 - Ensure containers are on the same Docker network
 
 **Ollama Model Issues:**
-- For external Ollama: Ensure service is running on port 11434
-- For Docker Ollama: Check container logs and model downloads
-- Verify baseURL in `librechat.yaml` matches your setup
+- **Memory Errors**: If you see "model requires more system memory", change to a smaller model in `.env`:
+  ```bash
+  DEFAULT_OLLAMA_MODEL=tinyllama:latest  # Use smaller model
+  ```
+- **Model Not Found**: Check if model downloaded: `docker exec librechat-ollama-1 ollama list`
+- **Auto-download Failed**: Check downloader logs: `docker-compose logs ollama-model-downloader`
+- **For external Ollama**: Ensure service is running on port 11434
+- **For Docker Ollama**: Check container logs and model downloads
+- **Verify baseURL**: Ensure `librechat.yaml` baseURL matches your setup:
+  - Docker setup: `http://ollama:11434/v1/`
+  - External setup: `http://host.docker.internal:11434/v1/`
 
 **Browser Automation Issues:**
 - Playwright MCP runs in headed mode for visual feedback
