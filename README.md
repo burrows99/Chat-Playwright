@@ -67,4 +67,4 @@ A chat-driven browser automation tool powered by:
 
 ## License
 
-MIT License
+[MIT License](https://github.com/burrows99/Chat-Playwright/blob/main/LICENSE)
